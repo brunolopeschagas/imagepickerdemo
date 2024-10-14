@@ -1,8 +1,19 @@
 # imagepickerdemo
 
-A new Flutter project.
+A image helper thats save and retrieve images from local storage.
 
-## Getting Started
+- Pick image from a gallery or camera and save into the apps folder.
+- Display the image
+- Save it into local storage
+
+Needed packages:
+- image_picker: ^1.1.2
+- path_provider: ^2.1.4
+- path: ^1.9.0
+
+
+
+## Getting Started Flutter
 
 This project is a starting point for a Flutter application.
 
