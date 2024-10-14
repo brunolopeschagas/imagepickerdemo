@@ -41,52 +41,65 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         title: const Text('Image Picker Example'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_storedImage != null)
-              Image.file(
-                _storedImage!,
-                width: 300,
-                height: 300,
-                fit: BoxFit.cover,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (_storedImage != null)
+                    Image.file(
+                      _storedImage!,
+                      width: 300,
+                      height: 300,
+                      fit: BoxFit.cover,
+                    )
+                  else
+                    const Text('No image selected.'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      blImagePicker.pickImage().then((value) {
+                        printImage(value);
+                      });
+                    },
+                    child: const Text('Pick a Image from the Gallery'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => saveImage(_storedImage).then(
+                      (value) {
+                        print(_storedImage!.absolute.toString());
+                      },
+                    ),
+                    child: const Text('Save image'),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextFormField(
+                    controller: _imageNameController,
+                    decoration: const InputDecoration(
+                      hintText: 'Image name to pick',
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      blImagePicker
+                          .retrieveImage(_imageNameController.text)
+                          .then((value) {
+                        printImage(value);
+                      });
+                    },
+                    child: const Text('Retrieve Image from name'),
+                  ),
+                ],
               )
-            else
-              const Text('No image selected.'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                blImagePicker.pickImage().then((value) {
-                  printImage(value);
-                });
-              },
-              child: const Text('Pick Image from Gallery'),
-            ),
-            TextFormField(
-              controller: _imageNameController,
-              decoration: const InputDecoration(
-                hintText: 'Image name to pick',
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                blImagePicker
-                    .retrieveImage(_imageNameController.text)
-                    .then((value) {
-                  printImage(value);
-                });
-              },
-              child: const Text('Retrieve Image'),
-            ),
-            ElevatedButton(
-              onPressed: () => saveImage(_storedImage).then(
-                (value) {
-                  print(_storedImage!.absolute.toString());
-                },
-              ),
-              child: const Text('Save image'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
