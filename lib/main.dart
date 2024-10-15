@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:imagepickerdemo/bl_image_picker.dart';
-import 'package:path/path.dart';
+import 'package:imagepickerdemo/local_image_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,8 +30,8 @@ class ImagePickerScreen extends StatefulWidget {
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
   File? _storedImage;
-  BlImagePicker blImagePicker = BlImagePicker();
-  TextEditingController _imageNameController = TextEditingController();
+  LocalImagePicker localImagePicker = LocalImagePicker();
+  final TextEditingController _imageNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +60,15 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      blImagePicker.pickImage().then((value) {
+                      localImagePicker.pickImage().then((value) {
                         printImage(value);
                       });
                     },
                     child: const Text('Pick a Image from the Gallery'),
                   ),
                   ElevatedButton(
-                    onPressed: () => saveImage(_storedImage).then(
+                    onPressed: () =>
+                        saveImage(_storedImage, _imageNameController.text).then(
                       (value) {
                         print(_storedImage!.absolute.toString());
                       },
@@ -88,7 +88,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      blImagePicker
+                      localImagePicker
                           .retrieveImage(_imageNameController.text)
                           .then((value) {
                         printImage(value);
@@ -111,7 +111,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     });
   }
 
-  Future<File> saveImage(File? storedImage) {
-    return blImagePicker.saveImageToLocalFileSystem(storedImage!);
+  Future<File> saveImage(File? storedImage, String newImageName) {
+    return localImagePicker.saveImage(storedImage!, newImageName: newImageName);
   }
 }
